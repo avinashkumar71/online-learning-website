@@ -1,0 +1,1 @@
+from .simple_tag_and_filter import percent, currency

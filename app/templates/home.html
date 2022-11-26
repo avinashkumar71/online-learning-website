@@ -1,0 +1,85 @@
+<!doctype html>
+{% load simple_tag_and_filter %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Course</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Earth</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                {% if request.session.email %}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/mycourse/">MyCourse</a>
+                </li>
+                {% endif%}
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="/signin/">Login</a>
+                </li>
+                {% if request.session.email %}
+                <li class="nav-item">
+                    <a class=" btn btn-danger" aria-current="page" href="/logout/">Logout</a>
+                </li>
+                {% endif %}
+
+
+            </ul>
+            {% if user is not None%}
+            <a class="btn btn-success" aria-current="page" href="#">Login by {{user.name}}</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+<br>
+<br>
+
+<div class="row mx-auto">
+    {% for course in courses %}
+    <div class="card mx-auto mb-5" id=1 style="width: 18rem;">
+        <a href="#"> <img src="{{course.thumbnail.url}}" class="card-img-top" alt="..."/> </a>
+        <div class="card-body">
+            <p class="card-title">{{course.name}}</p>
+            <p class="card-text">Save {{course.discount}}%</p>
+            <p class="card-text">
+                <del>{{course.price|currency}}</del>
+                <span>{% percent course.price course.discount as value %} {{value|currency}}</span>
+            </p>
+            <div class="card-footer p-0">
+                <div class="row no-gutters">
+                    <div class="col border-right">
+                        {% if request.session.email %}
+                            <a href="/enroll/{{course.slug}}" class="btn btn-light btn-block">Enroll Now</a>
+                        {% else %}
+                            <a href="/signin/" class="btn btn-light btn-block">Enroll Now</a>
+                        {% endif %}
+                    </div>
+                    <div class="col border-right">
+                        <a href="/course/{{course.slug}}" class="btn btn-light btn-block"> Show More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+</body>
+</html>
